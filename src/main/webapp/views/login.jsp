@@ -29,7 +29,7 @@
 	
 	function doSuccessBack(res) {
 		if (res.success == true) {
-			window.location.href = $("#base_path").val()+"/index.jsp";
+			window.location.href = $("#base_path").val()+"/views/main.jsp";
 		}else{
 			
 		}
