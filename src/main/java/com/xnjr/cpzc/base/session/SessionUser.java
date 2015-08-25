@@ -21,6 +21,10 @@ public class SessionUser extends AUserDetail {
     public SessionUser() {
     }
 
+    public SessionUser(String user_id) {
+        this.user_id = user_id;
+    }
+
     public SessionUser(String user_id, String account_number) {
         this.user_id = user_id;
         this.account_number = account_number;
