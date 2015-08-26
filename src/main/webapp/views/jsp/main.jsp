@@ -7,10 +7,10 @@
 <title>信息管理系统界面</title>
 </head>
 <frameset rows="88,*" cols="*" frameborder="no" border="0" framespacing="0">
-  <frame src="top.jsp" name="topFrame" scrolling="no" noresize="noresize" id="topFrame" title="topFrame" />
+  <frame src="top.jsp" name="topFrame" scrolling="auto" noresize="noresize" id="topFrame" title="topFrame" />
   <frameset cols="187,*" frameborder="no" border="0" framespacing="0">
-    <frame src="menu.jsp" name="leftFrame" scrolling="no" noresize="noresize" id="leftFrame" title="leftFrame" />
-    <frame src="default.jsp" name="rightFrame" id="rightFrame" title="rightFrame" />
+    <frame src="left.jsp" name="leftFrame" scrolling="auto" noresize="noresize" id="leftFrame" title="leftFrame" />
+    <frame src="index.jsp" name="rightFrame" id="rightFrame" title="rightFrame" />
   </frameset>
 </frameset>
 <noframes><body>

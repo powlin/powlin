@@ -7,7 +7,6 @@
 <title>无标题文档</title>
 <link href="../components/css/style.css" rel="stylesheet" type="text/css" />
 <script language="JavaScript" src="../components/js/jquery.js"></script>
-
 <script type="text/javascript">
 $(function(){	
 	//导航切换
@@ -32,7 +31,7 @@ $(function(){
 </head>
 
 <body style="background:#f0f9fd;">
-	<div class="lefttop"><span></span>通讯录</div>
+	<div class="lefttop"><span></span>功能导航</div>
     
     <dl class="leftmenu">
         

@@ -5,7 +5,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>欢迎产品众筹后台管理系统</title>
-<jsp:include page="../components/jsp/include.jsp" />
+<jsp:include page="../../components/jsp/include.jsp" />
 <script type="text/javascript" src="<%=request.getContextPath()%>/components/js/cloud.js"></script>
 <script type="text/javascript">
 	$(function(){
@@ -18,22 +18,13 @@
 		$('#loginBtn').click(function() {
 			var data = {};
 			var t = $('form').serializeArray();
-			
 			$.each(t, function() {
 				data[this.name] = this.value;
 			});
-			var url = $("#base_path").val() + "/sysUser/login";
-			doPostAjax(url, data, doSuccessBack);
+			//var url = $("#base_path").val() + "/sysUser/login";
+			//$('#loginForm').attr("action", url).submit();
 		});
 	});
-	
-	function doSuccessBack(res) {
-		if (res.success == true) {
-			window.location.href = $("#base_path").val()+"/views/main.jsp";
-		}else{
-			
-		}
-	}
 </script>
 </head>
 <body style="background-color:#1c77ac; background-image:url(<%=request.getContextPath()%>/components/images/light.png); background-repeat:no-repeat; background-position:center top; overflow:hidden;">
@@ -52,7 +43,7 @@
 	</div>
     <div class="loginbody">
     	<span class="systemlogo"></span>
-    	<form id="loginForm">
+    	<form id="loginForm" method="post">
 		    <div class="loginbox">
 			    <ul>
 				    <li>
@@ -62,7 +53,7 @@
 			        	<input name="login_pwd" type="password" class="loginpwd"/>
 			        </li>
 			    	<li>
-			    		<input id="loginBtn" type="button" class="loginbtn" value="登录"/>
+			    		<input id = "loginBtn" type="button" class="loginbtn" value="登录"/>
 			    		<input type="checkbox" value="" checked="checked"/>记住密码
 			    	</li>
 		    	</ul>

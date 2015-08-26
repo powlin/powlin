@@ -1,10 +1,12 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html lang="zh-CN">
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>无标题文档</title>
-<link href="css/style.css" rel="stylesheet" type="text/css" />
-<script type="text/javascript" src="js/jquery.js"></script>
+<link href="../components/css/style.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="../components/js/jquery.js"></script>
 
 <script type="text/javascript">
 $(document).ready(function(){
@@ -47,15 +49,15 @@ $(document).ready(function(){
     <div class="tools">
     
     	<ul class="toolbar">
-        <li class="click"><span><img src="images/t01.png" /></span>添加</li>
-        <li class="click"><span><img src="images/t02.png" /></span>修改</li>
-        <li><span><img src="images/t03.png" /></span>删除</li>
-        <li><span><img src="images/t04.png" /></span>统计</li>
+        <li class="click"><span><img src="../components/images/t01.png" /></span>添加</li>
+        <li class="click"><span><img src="../components/images/t02.png" /></span>修改</li>
+        <li><span><img src="../components/images/t03.png" /></span>删除</li>
+        <li><span><img src="../components/images/t04.png" /></span>统计</li>
         </ul>
         
         
         <ul class="toolbar1">
-        <li><span><img src="images/t05.png" /></span>设置</li>
+        <li><span><img src="../components/images/t05.png" /></span>设置</li>
         </ul>
     
     </div>
@@ -65,7 +67,7 @@ $(document).ready(function(){
     	<thead>
     	<tr>
         <th><input name="" type="checkbox" value="" checked="checked"/></th>
-        <th>编号<i class="sort"><img src="images/px.gif" /></i></th>
+        <th>编号<i class="sort"><img src="../components/images/px.gif" /></i></th>
         <th>标题</th>
         <th>用户</th>
         <th>籍贯</th>
@@ -197,7 +199,7 @@ $(document).ready(function(){
     	<div class="tiptop"><span>提示信息</span><a></a></div>
         
       <div class="tipinfo">
-        <span><img src="images/ticon.png" /></span>
+        <span><img src="../components/images/ticon.png" /></span>
         <div class="tipright">
         <p>是否确认对信息的修改 ？</p>
         <cite>如果是请点击确定按钮 ，否则请点取消。</cite>
