@@ -8,26 +8,51 @@
 <jsp:include page="../../components/jsp/include.jsp" />
 <script type="text/javascript">
 $(document).ready(function(){
-  $(".click").click(function(){
-  $(".tip").fadeIn(200);
-  });
+	$(".click").click(function(){
+		$(".tip").fadeIn(200);
+	});
   
-  $(".tiptop a").click(function(){
-  $(".tip").fadeOut(200);
+	$(".addmenu").click(function(){
+		$(".addmenudiv").fadeIn(200);
+	});
+  
+	$(".tiptop a").click(function(){
+		$(".tip").fadeOut(200);
+	});
+
+	$(".sure").click(function(){
+		$(".tip").fadeOut(100);
+	  
+	});
+	//登录
+	$('#addmenuBtn').click(function() {
+		var data = {};
+		var t = $('#addmenuForm').serializeArray();
+		
+		$.each(t, function() {
+			data[this.name] = this.value;
+		});
+		var url = $("#base_path").val() + "/menumgr/addmenu";
+		doPostAjax(url, data, doSuccessBack);
+	});
+
+  	$(".cancel").click(function(){
+	  	$(".tip").fadeOut(100);
+	});
+
 });
 
-  $(".sure").click(function(){
-  $(".tip").fadeOut(100);
-});
-
-  $(".cancel").click(function(){
-  $(".tip").fadeOut(100);
-});
-
-});
+function doSuccessBack(res) {
+	if (res.errorCode == 0) {
+		//window.location.href = $("#base_path").val()+"/views/system/menu_mgr.jsp";
+	}else{
+		
+	}
+}
 </script>
 </head>
 <body>
+	<input type="hidden" id="base_path" value="<%=request.getContextPath()%>"/>
 	<div class="place">
 	    <span>位置：</span>
 	    <ul class="placeul">
@@ -38,7 +63,7 @@ $(document).ready(function(){
     <div class="rightinfo">
     <div class="tools">
     	<ul class="toolbar">
-	        <li class="click"><span><img src="<%=request.getContextPath()%>/components/images/t01.png" /></span>添加</li>
+	        <li class="click addmenu"><span><img src="<%=request.getContextPath()%>/components/images/t01.png" /></span>添加</li>
 	        <li class="click"><span><img src="<%=request.getContextPath()%>/components/images/t02.png" /></span>修改</li>
 	        <li><span><img src="<%=request.getContextPath()%>/components/images/t03.png" /></span>删除</li>
         	<li><span><img src="<%=request.getContextPath()%>/components/images/t04.png" /></span>统计</li>
@@ -113,7 +138,26 @@ $(document).ready(function(){
     
     </div>
     
+    <div class="tip addmenu">
+    	<div class="tiptop"><span>添加菜单</span><a></a></div>
+        
+    	<div class="tipinfo">
+	        <form id="addmenuForm">
+	        	<input name="menuCode" type="text" value="01141"/>
+	        	<input name="menuName" type="text" value="测试菜单"/>
+	        	<input name="menuUrl" type="text" value="/std-account/account"/>
+	        	<input name="parentCode" type="text" value=""/>
+	        	<input name="orderNo" type="text" value="1"/>
+	        	<input name="remark" type="text" value="测试"/>
+	        </form>
+        </div>
+        
+        <div class="tipbtn">
+        <input name="" type="button" id="addmenuBtn" class="sure" value="确定" />&nbsp;
+        <input name="" type="button"  class="cancel" value="取消" />
+        </div>
     
+    </div>
     
     
     </div>
