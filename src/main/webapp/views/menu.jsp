@@ -35,7 +35,7 @@ $(function(){
 		    <span><img src="../components/images/leftico01.png" /></span>系统管理
 		    </div>
 	    	<ul class="menuson">
-		        <li class="active"><cite></cite><a href="<%=request.getContextPath()%>/views/system/menu_mgr.jsp" target="rightFrame">菜单设置</a><i></i></li>
+		        <li class="active"><cite></cite><a href="<%=request.getContextPath()%>/views/system/menu_mgr.htm" target="rightFrame">菜单设置</a><i></i></li>
 		        <li><cite></cite><a href="#" target="rightFrame">数据字典设置</a><i></i></li>
 		        <li><cite></cite><a href="#" target="rightFrame">系统参数设置</a><i></i></li>
 		        <li><cite></cite><a href="#" target="rightFrame">地理区域设置</a><i></i></li>

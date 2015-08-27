@@ -58,6 +58,12 @@
 	</bean>
 	
 	<!-- 视图配置 -->
+	<bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">    
+     	<property name="prefix" value="/views/" />    
+     	<property name="suffix" value=".jsp" />
+     	<property name="order" value="0" /> 
+    </bean>
+	
 	<bean id="viewResolver"
 		class="org.springframework.web.servlet.view.freemarker.FreeMarkerViewResolver">
 		<property name="cache" value="true" />
@@ -72,6 +78,7 @@
 		<property name="exposeRequestAttributes" value="true" />
 		<!-- 使用spring lib时 是否暴露 RequestContext 变量 默认为true -->
 		<property name="exposeSpringMacroHelpers" value="true" />
+		<property name="order" value="1" />
 	</bean>
 	<bean id="freemarkerConfig"
 		class="org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer">

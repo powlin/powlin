@@ -40,10 +40,10 @@ $(function(){
     <span><img src="../components/images/leftico01.png" /></span>管理信息
     </div>
     	<ul class="menuson">
-        <li><cite></cite><a href="../views/index.jsp" target="rightFrame">首页模版</a><i></i></li>
-        <li class="active"><cite></cite><a href="../views/right.jsp" target="rightFrame">数据列表</a><i></i></li>
-        <li><cite></cite><a href="../views/imgtable.jsp" target="rightFrame">图片数据表</a><i></i></li>
-        <li><cite></cite><a href="../views/form.jsp" target="rightFrame">添加编辑</a><i></i></li>
+        <li><cite></cite><a href="../views/index.htm" target="rightFrame">首页模版</a><i></i></li>
+        <li class="active"><cite></cite><a href="../views/right.htm" target="rightFrame">数据列表</a><i></i></li>
+        <li><cite></cite><a href="../views/imgtable.htm" target="rightFrame">图片数据表</a><i></i></li>
+        <li><cite></cite><a href="../views/form.htm" target="rightFrame">添加编辑</a><i></i></li>
         <li><cite></cite><a href="../views/imglist.jsp" target="rightFrame">图片列表</a><i></i></li>
         <li><cite></cite><a href="../views/imglist1.jsp" target="rightFrame">自定义</a><i></i></li>
         <li><cite></cite><a href="../views/tools.jsp" target="rightFrame">常用工具</a><i></i></li>

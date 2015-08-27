@@ -17,23 +17,16 @@
 		//登录
 		$('#loginBtn').click(function() {
 			var data = {};
-			var t = $('form').serializeArray();
-			
+			var t = $('#loginForm').serializeArray();
 			$.each(t, function() {
 				data[this.name] = this.value;
 			});
 			var url = $("#base_path").val() + "/sysUser/login";
-			doPostAjax(url, data, doSuccessBack);
+			$('#loginForm').attr("action", url).submit();
 		});
 	});
 	
-	function doSuccessBack(res) {
-		if (res.success == true) {
-			window.location.href = $("#base_path").val()+"/views/main.jsp";
-		}else{
-			
-		}
-	}
+	
 </script>
 </head>
 <body style="background-color:#1c77ac; background-image:url(<%=request.getContextPath()%>/components/images/light.png); background-repeat:no-repeat; background-position:center top; overflow:hidden;">
@@ -52,7 +45,7 @@
 	</div>
     <div class="loginbody">
     	<span class="systemlogo"></span>
-    	<form id="loginForm">
+    	<form id="loginForm" method="post">
 		    <div class="loginbox">
 			    <ul>
 				    <li>
