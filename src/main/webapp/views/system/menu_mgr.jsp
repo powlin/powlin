@@ -8,12 +8,38 @@
 <jsp:include page="../../components/jsp/include.jsp" />
 <script type="text/javascript">
 $(document).ready(function(){
-	$(".click").click(function(){
+	/* $(".click").click(function(){
 		$(".tip").fadeIn(200);
-	});
+	}); */
+	
+	//查询
+	var data = {};
+	data['start'] = 0;
+	data['limit'] = 1;
+	var url = $("#base_path").val() + "/menumgr/querymenu";
+	doPostAjax(url, data, function(){});
   
 	$(".addmenu").click(function(){
 		$(".addmenudiv").fadeIn(200);
+	});
+  
+	$(".updatemenu").click(function(){
+		$(".updatemenudiv").fadeIn(200);
+	});
+	
+	$(".deletemenu").click(function(){
+		var cmi = checkMenuItem();
+		if(cmi != ''){
+			if(!confirm("是否确认删除选中记录？")){
+				return false;
+			}
+			var data = {};
+			data['menuCodes'] = cmi;
+			var url = $("#base_path").val() + "/menumgr/deletemenu";
+			doPostAjax(url, data, doSuccessBack);
+		}else{
+			alert("请至少选择一条记录");
+		}
 	});
   
 	$(".tiptop a").click(function(){
@@ -24,7 +50,7 @@ $(document).ready(function(){
 		$(".tip").fadeOut(100);
 	  
 	});
-	//登录
+	//添加菜单
 	$('#addmenuBtn').click(function() {
 		var data = {};
 		var t = $('#addmenuForm').serializeArray();
@@ -35,6 +61,18 @@ $(document).ready(function(){
 		var url = $("#base_path").val() + "/menumgr/addmenu";
 		doPostAjax(url, data, doSuccessBack);
 	});
+	
+	//添加菜单
+	$('#updatemenuBtn').click(function() {
+		var data = {};
+		var t = $('#updatemenuForm').serializeArray();
+		
+		$.each(t, function() {
+			data[this.name] = this.value;
+		});
+		var url = $("#base_path").val() + "/menumgr/updatemenu";
+		doPostAjax(url, data, doSuccessBack);
+	});
 
   	$(".cancel").click(function(){
 	  	$(".tip").fadeOut(100);
@@ -43,11 +81,22 @@ $(document).ready(function(){
 });
 
 function doSuccessBack(res) {
-	if (res.errorCode == 0) {
-		//window.location.href = $("#base_path").val()+"/views/system/menu_mgr.jsp";
-	}else{
-		
+	var errorInfo = res.errorInfo;
+	alert(errorInfo);
+}
+
+function checkMenuItem(){
+	var check_val = "";
+	var mi = "input.menuitem[type=checkbox]";
+	for(var i = 0;i < $(mi).length;i++){
+		if($(mi).eq(i).is(":checked")){
+			check_val = check_val + $(mi).eq(i).val() + ",";
+		}
 	}
+	if(check_val.length > 0){
+		check_val = check_val.substring(0, check_val.length-1);
+	}
+	return check_val;
 }
 </script>
 </head>
@@ -64,8 +113,8 @@ function doSuccessBack(res) {
     <div class="tools">
     	<ul class="toolbar">
 	        <li class="click addmenu"><span><img src="<%=request.getContextPath()%>/components/images/t01.png" /></span>添加</li>
-	        <li class="click"><span><img src="<%=request.getContextPath()%>/components/images/t02.png" /></span>修改</li>
-	        <li><span><img src="<%=request.getContextPath()%>/components/images/t03.png" /></span>删除</li>
+	        <li class="click updatemenu"><span><img src="<%=request.getContextPath()%>/components/images/t02.png" /></span>修改</li>
+	        <li class="deletemenu"><span><img src="<%=request.getContextPath()%>/components/images/t03.png" /></span>删除</li>
         	<li><span><img src="<%=request.getContextPath()%>/components/images/t04.png" /></span>统计</li>
         </ul>
         <ul class="toolbar1">
@@ -78,8 +127,6 @@ function doSuccessBack(res) {
         <th><input name="" type="checkbox" value="" checked="checked"/></th>
         <th>编号<i class="sort"><img src="../components/images/px.gif" /></i></th>
         <th>标题</th>
-        <th>标题</th>
-        <th>标题</th>
         <th>用户</th>
         <th>籍贯</th>
         <th>发布时间</th>
@@ -89,10 +136,8 @@ function doSuccessBack(res) {
         </thead>
         <tbody>
         <tr>
-        <td><input name="" type="checkbox" value="" /></td>
+        <td><input name="menuitem" class="menuitem" type="checkbox" value="01141" /></td>
         <td>20130908</td>
-        <td>王金平幕僚：马英九声明字字见血 人活着没意思</td>
-        <td>王金平幕僚：马英九声明字字见血 人活着没意思</td>
         <td>王金平幕僚：马英九声明字字见血 人活着没意思</td>
         <td>admin</td>
         <td>江苏南京</td>
@@ -138,22 +183,131 @@ function doSuccessBack(res) {
     
     </div>
     
-    <div class="tip addmenu">
+    <div class="tip addmenudiv">
     	<div class="tiptop"><span>添加菜单</span><a></a></div>
         
     	<div class="tipinfo">
 	        <form id="addmenuForm">
-	        	<input name="menuCode" type="text" value="01141"/>
-	        	<input name="menuName" type="text" value="测试菜单"/>
-	        	<input name="menuUrl" type="text" value="/std-account/account"/>
-	        	<input name="parentCode" type="text" value=""/>
-	        	<input name="orderNo" type="text" value="1"/>
-	        	<input name="remark" type="text" value="测试"/>
+	        	<table width="100%">
+	        		<tr>
+	        			<td>
+	        				菜单编码
+	        			</td>
+	        			<td>
+				        	<input name="menuCode" type="text" value="01141"/>
+	        			</td>
+	        		</tr>
+	        		<tr>
+	        			<td>
+	        				菜单名称
+	        			</td>
+	        			<td>
+				        	<input name="menuName" type="text" value="测试菜单"/>
+	        			</td>
+	        		</tr>
+	        		<tr>
+	        			<td>
+	        				菜单地址
+	        			</td>
+	        			<td>
+	        				<input name="menuUrl" type="text" value="/std-account/account"/>
+	        			</td>
+	        		</tr>
+	        		<tr>
+	        			<td>
+	        				父编码
+	        			</td>
+	        			<td>
+	        				<input name="parentCode" type="text" value=""/>
+	        			</td>
+	        		</tr>
+	        		<tr>
+	        			<td>
+	        				顺序号
+	        			</td>
+	        			<td>
+	        				<input name="orderNo" type="text" value="1"/>
+	        			</td>
+	        		</tr>
+	        		<tr>
+	        			<td>
+	        				备注
+	        			</td>
+	        			<td>
+				        	<input name="remark" type="text" value="测试"/>
+	        			</td>
+	        		</tr>
+	        	</table>
 	        </form>
         </div>
         
         <div class="tipbtn">
         <input name="" type="button" id="addmenuBtn" class="sure" value="确定" />&nbsp;
+        <input name="" type="button"  class="cancel" value="取消" />
+        </div>
+    
+    </div>
+    
+    <div class="tip updatemenudiv">
+    	<div class="tiptop"><span>修改菜单</span><a></a></div>
+        
+    	<div class="tipinfo">
+	        <form id="updatemenuForm">
+	        	<table width="100%">
+	        		<tr>
+	        			<td>
+	        				菜单编码
+	        			</td>
+	        			<td>
+				        	<input name="menuCode" type="text" value="01141"/>
+	        			</td>
+	        		</tr>
+	        		<tr>
+	        			<td>
+	        				菜单名称
+	        			</td>
+	        			<td>
+				        	<input name="menuName" type="text" value="测试菜单"/>
+	        			</td>
+	        		</tr>
+	        		<tr>
+	        			<td>
+	        				菜单地址
+	        			</td>
+	        			<td>
+	        				<input name="menuUrl" type="text" value="/std-account/account"/>
+	        			</td>
+	        		</tr>
+	        		<tr>
+	        			<td>
+	        				父编码
+	        			</td>
+	        			<td>
+	        				<input name="parentCode" type="text" value=""/>
+	        			</td>
+	        		</tr>
+	        		<tr>
+	        			<td>
+	        				顺序号
+	        			</td>
+	        			<td>
+	        				<input name="orderNo" type="text" value="1"/>
+	        			</td>
+	        		</tr>
+	        		<tr>
+	        			<td>
+	        				备注
+	        			</td>
+	        			<td>
+				        	<input name="remark" type="text" value="测试"/>
+	        			</td>
+	        		</tr>
+	        	</table>
+	        </form>
+        </div>
+        
+        <div class="tipbtn">
+        <input name="" type="button" id="updatemenuBtn" class="sure" value="确定" />&nbsp;
         <input name="" type="button"  class="cancel" value="取消" />
         </div>
     
