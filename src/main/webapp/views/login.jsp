@@ -5,7 +5,8 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>欢迎产品众筹后台管理系统</title>
-<jsp:include page="../components/jsp/include.jsp" />
+<link rel="stylesheet" href="<%=request.getContextPath()%>/components/css/style.css"/>
+<script src="<%=request.getContextPath()%>/components/js/jquery-1.11.3.js"></script>
 <script type="text/javascript" src="<%=request.getContextPath()%>/components/js/cloud.js"></script>
 <script type="text/javascript">
 	$(function(){

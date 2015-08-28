@@ -36,7 +36,7 @@ $(function(){
 		    </div>
 	    	<ul class="menuson">
 		        <li class="active"><cite></cite><a href="<%=request.getContextPath()%>/views/system/menu_mgr.htm" target="rightFrame">菜单设置</a><i></i></li>
-		        <li><cite></cite><a href="#" target="rightFrame">数据字典设置</a><i></i></li>
+		        <li><cite></cite><a href="<%=request.getContextPath()%>/page/trade/system.jsp" target="rightFrame">数据字典设置</a><i></i></li>
 		        <li><cite></cite><a href="#" target="rightFrame">系统参数设置</a><i></i></li>
 		        <li><cite></cite><a href="#" target="rightFrame">地理区域设置</a><i></i></li>
 		        <li><cite></cite><a href="#" target="rightFrame">费率配置设置</a><i></i></li>
@@ -49,7 +49,7 @@ $(function(){
 		    <ul class="menuson">
 		        <li><cite></cite><a href="#" target="rightFrame">部门设置</a><i></i></li>
 		        <li><cite></cite><a href="#" target="rightFrame">岗位设置</a><i></i></li>
-		        <li><cite></cite><a href="#" target="rightFrame">角色设置</a><i></i></li>
+		        <li><cite></cite><a href="<%=request.getContextPath()%>/views/system/role.htm" target="rightFrame">角色设置</a><i></i></li>
 		        <li><cite></cite><a href="#" target="rightFrame">用户设置</a><i></i></li>
 		    </ul>     
 	    </dd>

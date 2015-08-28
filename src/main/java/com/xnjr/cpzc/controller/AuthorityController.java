@@ -18,8 +18,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.xnjr.cpzc.ao.IMenuAO;
+import com.xnjr.cpzc.ao.IRoleAO;
 import com.xnjr.cpzc.dto.res.Page;
 import com.xnjr.cpzc.dto.res.ZC703633Res;
+import com.xnjr.cpzc.dto.res.ZC703643Res;
 
 /** 
  * @author: 茜茜 
@@ -28,11 +30,68 @@ import com.xnjr.cpzc.dto.res.ZC703633Res;
  */
 
 @Controller
-@RequestMapping(value = "/auth")
-public class MAuthorityController extends BaseController {
+@RequestMapping(value = "/sysAuth")
+public class AuthorityController extends BaseController {
+    @Autowired
+    protected IRoleAO roleAO;
 
     @Autowired
     protected IMenuAO menuAO;
+
+    // ******************** 角色模块 ***************************
+    @RequestMapping(value = "/role/add", method = RequestMethod.POST)
+    @ResponseBody
+    public ZC703643Res addRole(@RequestParam("role_code") String roleCode,
+            @RequestParam("role_name") String roleName,
+            @RequestParam("role_level") String roleLevel,
+            @RequestParam(value = "remark", required = false) String remark) {
+        return roleAO.addRole(roleCode, roleName, roleLevel, this
+            .getSessionUser().getUser_id(), remark);
+    }
+
+    @RequestMapping(value = "/role/edit", method = RequestMethod.POST)
+    @ResponseBody
+    public boolean editRole(@RequestParam("role_code") String roleCode,
+            @RequestParam("role_name") String roleName,
+            @RequestParam("role_level") String roleLevel,
+            @RequestParam("remark") String remark) {
+        return roleAO.editRole(roleCode, roleName, roleLevel, this
+            .getSessionUser().getUser_id(), remark);
+    }
+
+    @RequestMapping(value = "/role/drop", method = RequestMethod.POST)
+    @ResponseBody
+    public boolean dropRole(@RequestParam("role_code") String roleCode) {
+        return roleAO.dropRole(roleCode);
+    }
+
+    @SuppressWarnings("rawtypes")
+    @RequestMapping(value = "/role/list", method = RequestMethod.GET)
+    @ResponseBody
+    public List queryRoleList(
+            @RequestParam(value = "role_code", required = false) String roleCode,
+            @RequestParam(value = "role_level", required = false) String roleLevel,
+            @RequestParam(value = "create_datetime_start", required = false) String createDatetimeStart,
+            @RequestParam(value = "create_datetime_end", required = false) String createDatetimeEnd) {
+        return roleAO.queryRoleList(roleCode, roleLevel, createDatetimeStart,
+            createDatetimeEnd);
+    }
+
+    @SuppressWarnings("rawtypes")
+    @RequestMapping(value = "/role/page", method = RequestMethod.GET)
+    @ResponseBody
+    public Page queryRolePage(
+            @RequestParam(value = "role_code", required = false) String roleCode,
+            @RequestParam(value = "role_level", required = false) String roleLevel,
+            @RequestParam(value = "create_datetime_start", required = false) String createDatetimeStart,
+            @RequestParam(value = "create_datetime_end", required = false) String createDatetimeEnd,
+            @RequestParam("start") String start,
+            @RequestParam("limit") String limit,
+            @RequestParam(value = "order_column", required = false) String orderColumn,
+            @RequestParam(value = "order_dir", required = false) String orderDir) {
+        return roleAO.queryRolePage(roleCode, roleLevel, createDatetimeStart,
+            createDatetimeEnd, start, limit, orderColumn, orderDir);
+    }
 
     // ******************** 菜单模块 ***************************
     @RequestMapping(value = "/menu/add", method = RequestMethod.POST)

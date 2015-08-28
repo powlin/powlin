@@ -5,7 +5,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>菜单设置</title>
-<jsp:include page="../../components/jsp/include.jsp" />
+<jsp:include page="../../components/jsp/include_2.jsp" />
 <script type="text/javascript">
 $(document).ready(function(){
 	/* $(".click").click(function(){
@@ -20,11 +20,11 @@ $(document).ready(function(){
 	doPostAjax(url, data, function(){});
   
 	$(".addmenu").click(function(){
-		$(".addmenudiv").fadeIn(200);
+		$(".addmenudiv").fadeIn(1000);
 	});
   
 	$(".updatemenu").click(function(){
-		$(".updatemenudiv").fadeIn(200);
+		$(".updatemenudiv").fadeIn(1000);
 	});
 	
 	$(".deletemenu").click(function(){
@@ -50,6 +50,7 @@ $(document).ready(function(){
 		$(".tip").fadeOut(100);
 	  
 	});
+	
 	//添加菜单
 	$('#addmenuBtn').click(function() {
 		var data = {};
