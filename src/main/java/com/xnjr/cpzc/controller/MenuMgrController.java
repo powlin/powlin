@@ -27,7 +27,7 @@ public class MenuMgrController extends BaseController {
     // ******** 添加菜单 *****
     @RequestMapping(value = "/addmenu", method = RequestMethod.POST)
     @ResponseBody
-    public boolean addmenu(@RequestParam("menuCode") String menuCode,
+    public ZC703633Res addmenu(@RequestParam("menuCode") String menuCode,
             @RequestParam("menuName") String menuName,
             @RequestParam("menuUrl") String menuUrl,
             @RequestParam("parentCode") String parentCode,
@@ -36,7 +36,7 @@ public class MenuMgrController extends BaseController {
         // 添加菜单验证
         ZC703633Res res = menuAO.addMenu(menuCode, menuName, menuUrl,
             parentCode, orderNo, remark);
-        return true;
+        return res;
     }
 
     // ******** 修改菜单 *****
@@ -55,26 +55,36 @@ public class MenuMgrController extends BaseController {
     }
 
     // ******** 删除菜单 *****
-    @RequestMapping(value = "/deletemenu", method = RequestMethod.POST)
+    @RequestMapping(value = "/menu/deletemenu", method = RequestMethod.POST)
     @ResponseBody
-    public boolean deletemenu(@RequestParam("menuCodes") String menuCodes) {
+    public boolean deletemenu(@RequestParam("menuCode") String menuCode) {
         // 删除菜单验证
-        if (menuCodes != null) {
-            String[] menuCodeArr = menuCodes.split(",");
-            for (String menuCode : menuCodeArr) {
-                menuAO.dropMenu(menuCode);
-            }
-        }
-        return true;
+        return menuAO.dropMenu(menuCode);
     }
 
-    // ******** 删除菜单 *****
-    @RequestMapping(value = "/querymenu", method = RequestMethod.POST)
+    // ******** 查询菜单 *****
+    @SuppressWarnings("rawtypes")
+    @RequestMapping(value = "/menu/querymenupage", method = RequestMethod.POST)
     @ResponseBody
-    public boolean queryMenus(@RequestParam("start") String start,
-            @RequestParam("limit") String limit) {
-        Page queryMenuPage = menuAO.queryMenuPage("", "", start, limit, "", "");
-        return true;
+    public Page queryMenus(@RequestParam("menuCode") String menuCode,
+            @RequestParam("parentCode") String parentCode) {
+        Page queryMenuPage = menuAO.queryMenuPage(menuCode, parentCode, "", "",
+            "", "");
+        return queryMenuPage;
+    }
+
+    @SuppressWarnings("rawtypes")
+    @RequestMapping(value = "/menu/page", method = RequestMethod.GET)
+    @ResponseBody
+    public Page queryMenuPage(
+            @RequestParam(value = "menuCode", required = false) String menuCode,
+            @RequestParam(value = "parentCode", required = false) String parentCode,
+            @RequestParam("start") String start,
+            @RequestParam("limit") String limit,
+            @RequestParam(value = "orderColumn", required = false) String orderColumn,
+            @RequestParam(value = "orderDir", required = false) String orderDir) {
+        return menuAO.queryMenuPage(menuCode, parentCode, start, limit,
+            orderColumn, orderDir);
     }
 
 }

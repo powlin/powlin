@@ -5,7 +5,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>菜单设置</title>
-<jsp:include page="../../components/jsp/include_2.jsp" />
+<jsp:include page="../../components/jsp/include.jsp" />
 <script type="text/javascript">
 $(document).ready(function(){
 	/* $(".click").click(function(){
@@ -13,22 +13,14 @@ $(document).ready(function(){
 	}); */
 	
 	//查询
-	var data = {};
+	/* var data = {};
 	data['start'] = 0;
 	data['limit'] = 1;
 	var url = $("#base_path").val() + "/menumgr/querymenu";
-	doPostAjax(url, data, function(){});
-  
-	$(".addmenu").click(function(){
-		$(".addmenudiv").fadeIn(1000);
-	});
-  
-	$(".updatemenu").click(function(){
-		$(".updatemenudiv").fadeIn(1000);
-	});
+	doPostAjax(url, data, function(){}); */
 	
 	$(".deletemenu").click(function(){
-		var cmi = checkMenuItem();
+		/* var cmi = checkMenuItem(); */
 		if(cmi != ''){
 			if(!confirm("是否确认删除选中记录？")){
 				return false;
@@ -60,7 +52,7 @@ $(document).ready(function(){
 			data[this.name] = this.value;
 		});
 		var url = $("#base_path").val() + "/menumgr/addmenu";
-		doPostAjax(url, data, doSuccessBack);
+		doPostAjax(url, data, addmenuSuccessBack);
 	});
 	
 	//添加菜单
@@ -81,12 +73,131 @@ $(document).ready(function(){
 
 });
 
+$(function() {
+	// 绑定列表
+	$('#tableList').bootstrapTable({
+		method : "get",
+		url : $("#base_path").val() + "/menumgr/menu/page",
+		height : $(window).height() - 120,
+		striped : true,
+		singleSelect : true,
+		queryParams : function(params) {
+			return {
+				menuCode : $("#menu_code_search").val(),
+				parentCode : $("#parent_code_search").val(),
+				start : params.offset / params.limit + 1,
+				limit : params.limit
+			};
+		},
+		queryParamsType : 'limit',
+		responseHandler : function(res) {
+			return {
+				rows : res.data.list,
+				total : res.data.totalCount
+			};
+		},
+		pagination : true,
+		sidePagination : 'server', // 服务端请求
+		totalRows : 0,
+		pageNumber : 1,
+		pageSize : 10,
+		pageList : [ 10, 20, 30, 40, 50 ],
+		columns : [{
+			field : 'menuCode',
+			title : '菜单编号',
+			align : 'left',
+			valign : 'middle',
+			sortable : false
+		}, {
+			field : 'menuName',
+			title : '菜单名称',
+			align : 'left',
+			valign : 'middle',
+			sortable : false
+		}, {
+			field : 'menuUrl',
+			title : '菜单url',
+			align : 'left',
+			valign : 'middle',
+			sortable : false
+		}, {
+			field : 'parentCode',
+			title : '上级菜单编号',
+			align : 'left',
+			valign : 'middle',
+			sortable : false
+		}, {
+			field : 'orderNo',
+			title : '菜单顺序',
+			align : 'left',
+			valign : 'middle',
+			sortable : false
+		}, {
+			field : 'remark',
+			title : '备注',
+			align : 'left',
+			valign : 'middle',
+			sortable : false
+		}, {
+			field : 'operate',
+			title : '操作',
+			width : 200,
+			align : 'center',
+			valign : 'middle',
+			formatter : operateFormatter,
+			events : operateEvents
+		}]
+	});
+
+	// 查询
+	$('#searchBtn').click(function() {
+		$('#tableList').bootstrapTable('refresh');
+	});
+});
+
+function operateFormatter(value, row) {
+    return ['<a href="#" class="edit">查看</a> <a href="#" class="del">删除</a>'].join('');
+    //<button class="btn btn-primary btn-xs edit">修改</button>&nbsp;&nbsp;<button class="btn btn-danger btn-xs del">删除</button>&nbsp;<button class="btn btn-danger btn-xs choice">分配菜单</button>'].join('');
+}
+
+window.operateEvents = {
+    'click .edit': function (e, value, row, index) {
+    	$("#operate_id").val("edit");
+    },
+    'click .del': function (e, value, row, index) {
+    	if(!confirm("是否确认删除菜单"+row.menuCode+"?")){
+    		return false;
+    	}
+    	var url = $("#base_path").val() + "/menumgr/menu/deletemenu";
+    	var data = {menuCode:row.menuCode};
+		doPostAjax(url, data, doSuccessDel);
+    },
+    'click .choice': function (e, value, row, index) {
+    	window.location.href = $("#base_path").val()+"/page/system/role_menu.jsp?role_code="+row.roleCode+"&role_name="+row.roleName;
+    }
+};
+
+function addmenuSuccessBack(res){
+	var menuCode = res.menuCode;
+	alert(menuCode);
+}
+
 function doSuccessBack(res) {
+	alert (res.success) ;
 	var errorInfo = res.errorInfo;
 	alert(errorInfo);
 }
 
-function checkMenuItem(){
+function doSuccessDel(res) {
+	if (res.success == true) {
+		alert("删除成功");
+		$('#tableList').bootstrapTable('refresh');
+	}else{
+		alert("删除失败");
+	}
+}
+
+/* function checkMenuItem(){
 	var check_val = "";
 	var mi = "input.menuitem[type=checkbox]";
 	for(var i = 0;i < $(mi).length;i++){
@@ -98,7 +209,7 @@ function checkMenuItem(){
 		check_val = check_val.substring(0, check_val.length-1);
 	}
 	return check_val;
-}
+} */
 </script>
 </head>
 <body>
@@ -110,211 +221,92 @@ function checkMenuItem(){
 		    <li><a href="#">菜单设置</a></li>
 	    </ul>
     </div>
-    <div class="rightinfo">
-    <div class="tools">
-    	<ul class="toolbar">
-	        <li class="click addmenu"><span><img src="<%=request.getContextPath()%>/components/images/t01.png" /></span>添加</li>
-	        <li class="click updatemenu"><span><img src="<%=request.getContextPath()%>/components/images/t02.png" /></span>修改</li>
-	        <li class="deletemenu"><span><img src="<%=request.getContextPath()%>/components/images/t03.png" /></span>删除</li>
-        	<li><span><img src="<%=request.getContextPath()%>/components/images/t04.png" /></span>统计</li>
-        </ul>
-        <ul class="toolbar1">
-        	<li><span><img src="<%=request.getContextPath()%>/components/images/t05.png" /></span>设置</li>
-        </ul>
-    </div>
-    <table class="tablelist">
-    	<thead>
-    	<tr>
-        <th><input name="" type="checkbox" value="" checked="checked"/></th>
-        <th>编号<i class="sort"><img src="../components/images/px.gif" /></i></th>
-        <th>标题</th>
-        <th>用户</th>
-        <th>籍贯</th>
-        <th>发布时间</th>
-        <th>是否审核</th>
-        <th>操作</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr>
-        <td><input name="menuitem" class="menuitem" type="checkbox" value="01141" /></td>
-        <td>20130908</td>
-        <td>王金平幕僚：马英九声明字字见血 人活着没意思</td>
-        <td>admin</td>
-        <td>江苏南京</td>
-        <td>2013-09-09 15:05</td>
-        <td>已审核</td>
-        <td><a href="#" class="tablelink">查看</a>     <a href="#" class="tablelink"> 删除</a></td>
-        </tr> 
-        </tbody>
-    </table>
-    
-   
-    <div class="pagin">
-    	<div class="message">共<i class="blue">1256</i>条记录，当前显示第&nbsp;<i class="blue">2&nbsp;</i>页</div>
-        <ul class="paginList">
-        <li class="paginItem"><a href="javascript:;"><span class="pagepre"></span></a></li>
-        <li class="paginItem"><a href="javascript:;">1</a></li>
-        <li class="paginItem current"><a href="javascript:;">2</a></li>
-        <li class="paginItem"><a href="javascript:;">3</a></li>
-        <li class="paginItem"><a href="javascript:;">4</a></li>
-        <li class="paginItem"><a href="javascript:;">5</a></li>
-        <li class="paginItem more"><a href="javascript:;">...</a></li>
-        <li class="paginItem"><a href="javascript:;">10</a></li>
-        <li class="paginItem"><a href="javascript:;"><span class="pagenxt"></span></a></li>
-        </ul>
-    </div>
-    
-    
-    <div class="tip">
-    	<div class="tiptop"><span>提示信息</span><a></a></div>
-        
-      <div class="tipinfo">
-        <span><img src="../components/images/ticon.png" /></span>
-        <div class="tipright">
-        <p>是否确认对信息的修改 ？</p>
-        <cite>如果是请点击确定按钮 ，否则请点取消。</cite>
-        </div>
-        </div>
-        
-        <div class="tipbtn">
-        <input name="" type="button"  class="sure" value="确定" />&nbsp;
-        <input name="" type="button"  class="cancel" value="取消" />
-        </div>
-    
-    </div>
-    
-    <div class="tip addmenudiv">
-    	<div class="tiptop"><span>添加菜单</span><a></a></div>
-        
-    	<div class="tipinfo">
-	        <form id="addmenuForm">
-	        	<table width="100%">
-	        		<tr>
-	        			<td>
-	        				菜单编码
-	        			</td>
-	        			<td>
-				        	<input name="menuCode" type="text" value="01141"/>
-	        			</td>
-	        		</tr>
-	        		<tr>
-	        			<td>
-	        				菜单名称
-	        			</td>
-	        			<td>
-				        	<input name="menuName" type="text" value="测试菜单"/>
-	        			</td>
-	        		</tr>
-	        		<tr>
-	        			<td>
-	        				菜单地址
-	        			</td>
-	        			<td>
-	        				<input name="menuUrl" type="text" value="/std-account/account"/>
-	        			</td>
-	        		</tr>
-	        		<tr>
-	        			<td>
-	        				父编码
-	        			</td>
-	        			<td>
-	        				<input name="parentCode" type="text" value=""/>
-	        			</td>
-	        		</tr>
-	        		<tr>
-	        			<td>
-	        				顺序号
-	        			</td>
-	        			<td>
-	        				<input name="orderNo" type="text" value="1"/>
-	        			</td>
-	        		</tr>
-	        		<tr>
-	        			<td>
-	        				备注
-	        			</td>
-	        			<td>
-				        	<input name="remark" type="text" value="测试"/>
-	        			</td>
-	        		</tr>
-	        	</table>
-	        </form>
-        </div>
-        
-        <div class="tipbtn">
-        <input name="" type="button" id="addmenuBtn" class="sure" value="确定" />&nbsp;
-        <input name="" type="button"  class="cancel" value="取消" />
-        </div>
-    
-    </div>
-    
-    <div class="tip updatemenudiv">
-    	<div class="tiptop"><span>修改菜单</span><a></a></div>
-        
-    	<div class="tipinfo">
-	        <form id="updatemenuForm">
-	        	<table width="100%">
-	        		<tr>
-	        			<td>
-	        				菜单编码
-	        			</td>
-	        			<td>
-				        	<input name="menuCode" type="text" value="01141"/>
-	        			</td>
-	        		</tr>
-	        		<tr>
-	        			<td>
-	        				菜单名称
-	        			</td>
-	        			<td>
-				        	<input name="menuName" type="text" value="测试菜单"/>
-	        			</td>
-	        		</tr>
-	        		<tr>
-	        			<td>
-	        				菜单地址
-	        			</td>
-	        			<td>
-	        				<input name="menuUrl" type="text" value="/std-account/account"/>
-	        			</td>
-	        		</tr>
-	        		<tr>
-	        			<td>
-	        				父编码
-	        			</td>
-	        			<td>
-	        				<input name="parentCode" type="text" value=""/>
-	        			</td>
-	        		</tr>
-	        		<tr>
-	        			<td>
-	        				顺序号
-	        			</td>
-	        			<td>
-	        				<input name="orderNo" type="text" value="1"/>
-	        			</td>
-	        		</tr>
-	        		<tr>
-	        			<td>
-	        				备注
-	        			</td>
-	        			<td>
-				        	<input name="remark" type="text" value="测试"/>
-	        			</td>
-	        		</tr>
-	        	</table>
-	        </form>
-        </div>
-        
-        <div class="tipbtn">
-        <input name="" type="button" id="updatemenuBtn" class="sure" value="确定" />&nbsp;
-        <input name="" type="button"  class="cancel" value="取消" />
-        </div>
-    
-    </div>
-    
-    
+    <div class="leftinfo">
+	    <div class="panel-body">
+			<div>
+				<div id="custom-toolbar" style="margin-bottom: 8px">
+					<div class="form-inline" role="form" onsubmit="return searchSys();">
+						<div class="form-group mr40">
+							<label for="menuCode" class="control-label-first">菜单编号:</label> <input class="input-sm" type="text"
+								class="form-control" id="menu_code_search" placeholder="请输入菜单编号">
+						</div>
+						<div class="form-group">
+							<label for="parentCode" class="control-label">父菜单编号:</label> <input class="input-sm" type="text"
+								class="form-control" id="parent_code_search" placeholder="请选择父菜单编号">
+						</div>&nbsp;
+						<button id="searchBtn" class="btn btn-default btn-sm">搜索</button>
+						<button id="addBtn" class="btn btn-primary btn-sm" data-toggle="modal"
+								data-target="#myModal">新增</button>
+					</div>
+				</div>
+				<table id="tableList"></table>
+			</div>
+		</div>
+    	<!-- 模态框（Modal） -->
+		<div class="modal fade" id="myModal" tabindex="-1" role="dialog"
+			aria-labelledby="myModalLabel" aria-hidden="true">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal"
+							aria-hidden="true">&times;</button>
+						<h4 class="modal-title" id="myModalLabel">菜单设置</h4>
+					</div>
+					<div class="modal-body">
+						<form class="form-horizontal" role="form" id="addmenuForm">
+							<div class="form-group">
+								<label for="name" class="col-sm-2 control-label">菜单编号</label>
+								<div class="col-sm-10">
+									<input type="text" class="form-control" name="menuCode"
+										placeholder="请输入菜单编号">
+								</div>
+							</div>
+							<div class="form-group">
+								<label for="name" class="col-sm-2 control-label">菜单名称</label>
+								<div class="col-sm-10">
+									<input type="text" class="form-control" name="menuName"
+										placeholder="请输入菜单名称">
+								</div>
+							</div>
+							<div class="form-group">
+								<label for="name" class="col-sm-2 control-label">菜单地址</label>
+								<div class="col-sm-10">
+									<input type="text" class="form-control" name="menuUrl"
+										placeholder="请输入菜单地址">
+								</div>
+							</div>
+							<div class="form-group">
+								<label for="name" class="col-sm-2 control-label">父菜单编号</label>
+								<div class="col-sm-10">
+									<input type="text" class="form-control" name="parentCode"
+										placeholder="请输入父菜单编号">
+								</div>
+							</div>
+							<div class="form-group">
+								<label for="name" class="col-sm-2 control-label">菜单顺序号</label>
+								<div class="col-sm-10">
+									<input type="text" class="form-control" name="orderNo"
+										placeholder="请输入菜单顺序号">
+								</div>
+							</div>
+							<div class="form-group">
+								<label for="name" class="col-sm-2 control-label">备注</label>
+								<div class="col-sm-10">
+									<input type="text" class="form-control" name="remark"
+										placeholder="请输入备注">
+								</div>
+							</div>
+						</form>
+					</div>
+					<div class="modal-footer">
+						<button id="addmenuBtn" class="btn btn-primary">保存</button>
+						<button class="btn btn-default" data-dismiss="modal">关闭</button>
+					</div>
+				</div>
+				<!-- /.modal-content -->
+			</div>
+			<!-- /.modal -->
+		</div>
     </div>
     
     <script type="text/javascript">
