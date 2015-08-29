@@ -90,20 +90,47 @@
 		$('#searchBtn').click(function() {
 			$('#tableList').bootstrapTable('refresh');
 		});
+		
+		// 新增
+		$('#addBtn').click(function() {
+			window.location.href = $("#base_path").val() + "/sysAuth/role/detail?operate=add";
+		});
+		
+		$("#myModel").on("show.bs.modal", function() {
+	         $(this).removeData("bs.modal");
+		});
+
+		//新增提交
+		$('#subBtn').click(function() {
+			var data = {};
+			var t = $('form').serializeArray();
+			$.each(t, function() {
+				data[this.name] = this.value;
+			});
+			var operator = $("#operate_id").val() != "edit"?"add":"edit";
+			var url = $("#base_path").val() + "/sysAuth/role/" + operator;
+			doPostAjax(url, data, doSuccessBack);
+		});
 	});
 	
+	function doSuccessBack(res) {
+		if (res.success == true) {
+			alert("操作成功");
+			$('#myModal').modal('hide');
+			$('#tableList').bootstrapTable('refresh');
+		}
+	}
 	
 	function operateFormatter(value, row) {
-        return ['<a href="#" class="tablelink">查看</a><a href="#" class="tablelink"> 删除</a>'].join('');
-        //<button class="btn btn-primary btn-xs edit">修改</button>&nbsp;&nbsp;<button class="btn btn-danger btn-xs del">删除</button>&nbsp;<button class="btn btn-danger btn-xs choice">分配菜单</button>'].join('');
+        return ['<button class="btn btn-primary btn-xs edit">修改</button>&nbsp;&nbsp;<button class="btn btn-danger btn-xs del">删除</button>&nbsp;<button class="btn btn-danger btn-xs choice">分配菜单</button>'].join('');
     }
 	
     window.operateEvents = {
         'click .edit': function (e, value, row, index) {
-        	$("#operate_id").val("edit");
+        	window.location.href = $("#base_path").val() + "/sysAuth/role/detail?role_code="+row.roleCode+"&operate=edit";
         },
         'click .del': function (e, value, row, index) {
-        	var url = $("#base_path").val() + "/user/role/drop";
+        	var url = $("#base_path").val() + "/sysAuth/role/drop";
         	var data = {role_code:row.roleCode};
 			doPostAjax(url, data, doSuccessDel);
         },
@@ -130,6 +157,7 @@
 		    <li><a href="#">系统管理</a></li>
 		    <li><a href="#">菜单设置</a></li>
 	    </ul>
+	    <button id="addBtn" class="btn btn-primary btn-sm">新增</button></span>
     </div>
 	<div class="panel-body">
 		<div>
@@ -140,8 +168,13 @@
 							class="form-control" id="role_code_search" placeholder="请输入角色编号">
 					</div>
 					<div class="form-group">
-						<label for="parent_code" class="control-label">角色等级:</label> <input class="input-sm" type="text"
-							class="form-control" id="role_level_search" placeholder="请选择角色等级">
+						<label for="parent_code" class="control-label">角色等级:</label>
+						<select id="role_level_search" class="form-control" name="role_level">
+							<option value="">请选择</option>
+							<option value="1">1 财务级别</option>
+							<option value="2">2 运营推广级别</option>
+							<option value="3">3 风控级别</option>
+						</select>
 					</div>&nbsp;
 					<button id="searchBtn" class="btn btn-default btn-sm">搜索</button>
 				</div>

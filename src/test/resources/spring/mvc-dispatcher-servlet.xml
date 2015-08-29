@@ -145,6 +145,7 @@
 		</bean>
 		<mvc:interceptor>
 			<mvc:mapping path="/user/**" />
+			<mvc:mapping path="/sysAuth/**" />
 			<mvc:mapping path="/mana/msg/**" />
 			<mvc:mapping path="/msg/**" />
 			<mvc:mapping path="/supei/**" />

@@ -10,12 +10,14 @@ package com.xnjr.cpzc.controller;
 
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
 
 import com.xnjr.cpzc.ao.IMenuAO;
 import com.xnjr.cpzc.ao.IRoleAO;
@@ -63,6 +65,22 @@ public class AuthorityController extends BaseController {
     @ResponseBody
     public boolean dropRole(@RequestParam("role_code") String roleCode) {
         return roleAO.dropRole(roleCode);
+    }
+
+    @SuppressWarnings("rawtypes")
+    @RequestMapping(value = "/role/detail", method = RequestMethod.GET)
+    public ModelAndView getDetailRole(
+            @RequestParam(value = "role_code", required = false) String roleCode,
+            @RequestParam("operate") String operate) {
+        ModelAndView view = new ModelAndView("/system/role_detail");
+        if (StringUtils.isNotBlank(roleCode)) {
+            List list = roleAO.queryRoleList(roleCode, null, null, null);
+            if (list != null && list.size() > 0) {
+                view.addObject("role", list.get(0));
+                view.addObject("operate", operate);
+            }
+        }
+        return view;
     }
 
     @SuppressWarnings("rawtypes")
