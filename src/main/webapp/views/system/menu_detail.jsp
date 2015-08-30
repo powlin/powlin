@@ -11,6 +11,12 @@
 <jsp:include page="../../components/jsp/include_f.jsp" />
 <script type="text/javascript">
 	$(function() {
+		
+		var data = {};
+		data['menuCode'] = $("#menuCode").val();
+		var url = $("#base_path").val() + "/menumgr/menu/detailjson";
+		doGetAjax(url, data, fillSelSuccessBack);
+		
 		var operate = $("#operate").val();
 		if(operate == "edit"){
 			$("#operContent").text("修改菜单");
@@ -37,11 +43,26 @@
 			alert(res.msg);
 		}
 	}
+	
+	function fillSelSuccessBack(res){
+		var data = eval("(" + res.data + ")");
+		var html = "<option value=''>请选择</option>";
+		if(typeof(data) != "undefined"){
+			for(var i = 0;i < data.length;i++){
+				if(data[i].menuCode == $("#parentCodeVal").val()){
+					html += "<option selected='selected' value='"+data[i].menuCode+"'>"+data[i].menuCode + "   " + data[i].menuName+"</option>";
+				}else{
+					html += "<option value='"+data[i].menuCode+"'>"+data[i].menuCode + "   " + data[i].menuName+"</option>";
+				}
+			}
+		}
+		$("#parentCodeSel").html(html);
+	}
 </script>
 </head>
 <body>
-	<input type="hidden" id="base_path"
-		value="<%=request.getContextPath()%>" />
+	<input type="hidden" id="base_path" value="<%=request.getContextPath()%>" />
+	<input type="hidden" id="parentCodeVal" value="${menu.parentCode}"/>
 	<input type="hidden" id="operate" value = "${operate}"/>
 	<div class="place">
     	<span>位置：</span>
@@ -55,10 +76,10 @@
 	    <div class="formbody">
 	    <div class="formtitle"><span>菜单信息</span></div>
 		    <ul class="forminfo">
-			    <li><label>菜单编号:</label><input type="text" name="menuCode" value ="${menu.menuCode}"  class="dfinput"/></li>
+			    <li><label>菜单编号:</label><input type="text" id="menuCode" name="menuCode" value ="${menu.menuCode}"  class="dfinput"/></li>
 			    <li><label>菜单名称:</label><input type="text" name="menuName" value ="${menu.menuName}"  class="dfinput"/></li>
 			    <li><label>菜单地址:</label><input type="text" name="menuUrl" value ="${menu.menuUrl}"  class="dfinput"/></li>
-			    <li><label>上级菜单编号:</label><input type="text" name="parentCode" value ="${menu.parentCode}"  class="dfinput"/></li>
+			    <li><label>父菜单编号:</label><select id="parentCodeSel" name="parentCode" value ="${menu.parentCode}" class="dfinput"></select></li>
 			    <li><label>菜单顺序号:</label><input type="text" name="orderNo" value ="${menu.orderNo}"  class="dfinput"/></li>
 			    <li><label>备注:</label><input type="text" name="remark" value="${menu.remark}" class="dfinput"/></li>
 			    <li><input id="subBtn" type="button" class="btn mr40" value="确认保存"/></li>

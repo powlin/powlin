@@ -8,6 +8,9 @@
 <jsp:include page="../../components/jsp/include.jsp" />
 <script type="text/javascript">
 $(document).ready(function(){
+	var data = {};
+	var url = $("#base_path").val() + "/menumgr/menu/detailjson";
+	doGetAjax(url, data, fillSelSuccessBack);
 	
 	$(".deletemenu").click(function(){
 		/* var cmi = checkMenuItem(); */
@@ -100,7 +103,7 @@ $(function() {
 			sortable : false
 		}, {
 			field : 'parentCode',
-			title : '上级菜单编号',
+			title : '父菜单编号',
 			align : 'left',
 			valign : 'middle',
 			sortable : false
@@ -170,7 +173,7 @@ function doEditSuccessBack(res){
 function addmenuSuccessBack(res){
 	if(res.success == true){
 		alert("新增成功");
-		location.reload(true);
+		$('#tableList').bootstrapTable('refresh');
 	}else{
 		alert("新增失败");
 	}
@@ -189,6 +192,21 @@ function doSuccessDel(res) {
 	}else{
 		alert("删除失败");
 	}
+}
+
+function fillSelSuccessBack(res){
+	var data = eval("(" + res.data + ")");
+	var html = "<option value=''>请选择</option>";
+	if(typeof(data) != "undefined"){//判断undifined
+		for(var i = 0;i < data.length;i++){
+			if(data[i].menuCode == $("#parentCodeVal").val()){
+				html += "<option selected='selected' value='"+data[i].menuCode+"'>"+data[i].menuCode + "   " + data[i].menuName+"</option>";
+			}else{
+				html += "<option value='"+data[i].menuCode+"'>"+data[i].menuCode + "   " + data[i].menuName+"</option>";
+			}
+		}
+	}
+	$("#parent_code_search").html(html);
 }
 
 /* function checkMenuItem(){
@@ -226,8 +244,8 @@ function doSuccessDel(res) {
 								class="form-control" id="menu_code_search" placeholder="请输入菜单编号">
 						</div>
 						<div class="form-group">
-							<label for="parentCode" class="control-label">父菜单编号:</label> <input class="input-sm" type="text"
-								class="form-control" id="parent_code_search" placeholder="请选择父菜单编号">
+							<label for="parentCode" class="control-label">父菜单编号:</label> <select class="input-sm"
+								class="form-control" id="parent_code_search"></select>
 						</div>&nbsp;
 						<button id="searchBtn" class="btn btn-default btn-sm">搜索</button>
 						<button id="addBtn" class="btn btn-primary btn-sm">新增</button>

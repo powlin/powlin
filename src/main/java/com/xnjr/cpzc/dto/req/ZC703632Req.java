@@ -17,8 +17,28 @@ public class ZC703632Req {
     // 菜单编号
     private String menuCode;
 
+    // 菜单名称
+    private String menuName;
+
+    public String getMenuName() {
+        return menuName;
+    }
+
+    public void setMenuName(String menuName) {
+        this.menuName = menuName;
+    }
+
     // 父菜单编号
     private String parentCode;
+
+    // 菜单url
+    private String menuUrl;
+
+    // 菜单顺序号
+    private int orderNo;
+
+    // 备注
+    private String remark;
 
     public String getMenuCode() {
         return menuCode;
@@ -34,6 +54,30 @@ public class ZC703632Req {
 
     public void setParentCode(String parentCode) {
         this.parentCode = parentCode;
+    }
+
+    public String getMenuUrl() {
+        return menuUrl;
+    }
+
+    public void setMenuUrl(String menuUrl) {
+        this.menuUrl = menuUrl;
+    }
+
+    public int getOrderNo() {
+        return orderNo;
+    }
+
+    public void setOrderNo(int orderNo) {
+        this.orderNo = orderNo;
+    }
+
+    public String getRemark() {
+        return remark;
+    }
+
+    public void setRemark(String remark) {
+        this.remark = remark;
     }
 
 }
