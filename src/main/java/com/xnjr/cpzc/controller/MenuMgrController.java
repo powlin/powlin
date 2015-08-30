@@ -13,7 +13,9 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.xnjr.cpzc.ao.IMenuAO;
 import com.xnjr.cpzc.dto.res.Page;
+import com.xnjr.cpzc.dto.res.ZC703632Res;
 import com.xnjr.cpzc.dto.res.ZC703633Res;
+import com.xnjr.cpzc.util.JsonUtils;
 
 /**
  * 系统用户模块
@@ -105,6 +107,23 @@ public class MenuMgrController extends BaseController {
             }
         }
         return view;
+    }
+
+    @RequestMapping(value = "/menu/detailjson", method = RequestMethod.GET)
+    @ResponseBody
+    public String queryDetailMenuJson(
+            @RequestParam(value = "menuCode", required = false) String menuCode) {
+        List<ZC703632Res> list = menuAO.queryMenuList("", "");
+        // if (menuCode != null && !"".equals(menuCode) && list != null) {
+        // Iterator<ZC703632Res> iterator = list.iterator();
+        // while (iterator.hasNext()) {
+        // if (menuCode.equals(iterator.next().getMenuCode())) {//
+        // 如果查询结果中的menuCode与页面一致，则不能选择为父节点
+        // iterator.remove();
+        // }
+        // }
+        // }
+        return JsonUtils.object2Json(list);
     }
 
 }
