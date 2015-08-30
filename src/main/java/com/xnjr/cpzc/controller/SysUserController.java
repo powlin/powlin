@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.xnjr.cpzc.ao.ISysUserAO;
 import com.xnjr.cpzc.base.session.SessionUser;
-import com.xnjr.cpzc.dto.res.ZC703501Res;
 
 /**
  * 系统用户模块
@@ -28,9 +27,13 @@ public class SysUserController extends BaseController {
     public String doLogin(@RequestParam("login_name") String loginName,
             @RequestParam("login_pwd") String loginPwd) {
         // 校验用户名密码
-        ZC703501Res res = sysUserAO.login(loginName, loginPwd, getRemoteHost());
-        // 创建session
-        sessionProvider.setUserDetail(new SessionUser(res.getUserId()));
-        return "/main";
+        boolean flag = sysUserAO.login(loginName, loginPwd, getRemoteHost());
+        if (flag == true) {
+            // 创建session
+            sessionProvider.setUserDetail(new SessionUser(loginName));
+            return "/main";
+        } else {
+            return "/login";
+        }
     }
 }

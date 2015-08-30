@@ -111,7 +111,7 @@ public class MenuAOImpl implements IMenuAO {
         String jsonStr = BizConnecter.getBizData("703632",
             JsonUtils.object2Json(zc703632Req));
         Gson gson = new Gson();
-        return gson.fromJson(jsonStr, new TypeToken<List<ZC703632Req>>() {
+        return gson.fromJson(jsonStr, new TypeToken<List<ZC703632Res>>() {
         }.getType());
     }
 

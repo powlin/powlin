@@ -135,7 +135,7 @@
 			doPostAjax(url, data, doSuccessDel);
         },
         'click .choice': function (e, value, row, index) {
-        	window.location.href = $("#base_path").val()+"/page/system/role_menu.jsp?role_code="+row.roleCode+"&role_name="+row.roleName;
+        	window.location.href = $("#base_path").val()+"/views/system/role_menu.jsp?role_code="+row.roleCode+"&role_name="+row.roleName;
         }
     };
     
@@ -182,5 +182,21 @@
 			<table id="tableList"></table>
 		</div>
 	</div>
+	<div id="myModal" class="modal hide fade">
+	    <div class="modal-header">
+	        <button type="button" class="close" data-dismiss="modal">x</button>
+	        <h3>对话框标题</h3>
+	    </div>
+	    <div class="modal-body">
+	        <p>对话框主体</p>
+	    </div>
+	    <div class="modal-footer">
+	        <a href="#" class="btn" data-dismiss="modal">取消</a>
+	        <a href="#" class="btn btn-primary" data-dismiss="modal">确定</a>
+	    </div>
+	</div>
+	<button type="button" data-toggle="modal" data-target="#myModal">打开对话框</button>
+<a href="#myModal" role="button" class="btn" data-toggle="modal">打开对话框</button>
+	 <a href="role_detail.jsp" data-toggle="modal" data-target="#myModal">打开对话框</a>
 </body>
 </html>

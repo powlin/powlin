@@ -8,8 +8,6 @@
  */
 package com.xnjr.cpzc.ao;
 
-import com.xnjr.cpzc.dto.res.ZC703501Res;
-
 /** 
  * 系统用户
  * @author: xieyj 
@@ -27,6 +25,6 @@ public interface ISysUserAO {
      * @create: 2015年8月17日 上午11:22:16 xieyj
      * @history:
      */
-    public ZC703501Res login(String loginName, String loginPwd, String loginIp);
+    public boolean login(String loginName, String loginPwd, String loginIp);
 
 }

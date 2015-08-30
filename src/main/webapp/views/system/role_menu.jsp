@@ -47,7 +47,7 @@
 
 	$(document).ready(function() {//初始化ztree对象
 		//下拉菜单
-		doGetAjax("/user/menu/nodelist", null, doMenuNode);
+		doGetAjax($("#base_path").val() + "/sysAuth/menu/nodelist", null, doMenuNode);
 		$('#saveBtn').click(function() {
 			doGetCheckedAll();
 		});
@@ -68,7 +68,7 @@
         }
         var data = {"menu_codes":menuCodes,"role_code":$("#role_code").val()};
        	alert(eval(data.value));
-        var url = $("#base_path").val() + "/user/menurole/add";
+        var url = $("#base_path").val() + "/sysAuth/menurole/add";
 		doPostAjax(url, data, doSuccessBack);
     }
 	

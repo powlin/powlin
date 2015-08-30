@@ -8,6 +8,7 @@
  */
 package com.xnjr.cpzc.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
@@ -22,8 +23,10 @@ import org.springframework.web.servlet.ModelAndView;
 import com.xnjr.cpzc.ao.IMenuAO;
 import com.xnjr.cpzc.ao.IRoleAO;
 import com.xnjr.cpzc.dto.res.Page;
+import com.xnjr.cpzc.dto.res.ZC703632Res;
 import com.xnjr.cpzc.dto.res.ZC703633Res;
 import com.xnjr.cpzc.dto.res.ZC703643Res;
+import com.xnjr.cpzc.dto.res.ZtreeRes;
 
 /** 
  * @author: 茜茜 
@@ -164,5 +167,23 @@ public class AuthorityController extends BaseController {
             @RequestParam(value = "order_dir", required = false) String orderDir) {
         return menuAO.queryMenuPage(menuCode, parentCode, start, limit,
             orderColumn, orderDir);
+    }
+
+    @SuppressWarnings("rawtypes")
+    @RequestMapping(value = "/menu/nodelist", method = RequestMethod.GET)
+    @ResponseBody
+    public List queryMenuNodeList(
+            @RequestParam(value = "menu_code", required = false) String menuCode,
+            @RequestParam(value = "parent_code", required = false) String parentCode) {
+        List<ZC703632Res> list = menuAO.queryMenuList(menuCode, parentCode);
+        List<ZtreeRes> resultList = new ArrayList<ZtreeRes>();
+        for (ZC703632Res result : list) {
+            ZtreeRes ztreeRes = new ZtreeRes();
+            ztreeRes.setId(result.getMenuCode());
+            ztreeRes.setpId(result.getParentCode());
+            ztreeRes.setName(result.getMenuName());
+            resultList.add(ztreeRes);
+        }
+        return resultList;
     }
 }
