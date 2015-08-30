@@ -1,11 +1,15 @@
 package com.xnjr.cpzc.controller;
 
+import java.util.List;
+
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
 
 import com.xnjr.cpzc.ao.IMenuAO;
 import com.xnjr.cpzc.dto.res.Page;
@@ -25,7 +29,7 @@ public class MenuMgrController extends BaseController {
     protected IMenuAO menuAO;
 
     // ******** 添加菜单 *****
-    @RequestMapping(value = "/addmenu", method = RequestMethod.POST)
+    @RequestMapping(value = "/menu/add", method = RequestMethod.POST)
     @ResponseBody
     public ZC703633Res addmenu(@RequestParam("menuCode") String menuCode,
             @RequestParam("menuName") String menuName,
@@ -34,13 +38,12 @@ public class MenuMgrController extends BaseController {
             @RequestParam("orderNo") String orderNo,
             @RequestParam("remark") String remark) {
         // 添加菜单验证
-        ZC703633Res res = menuAO.addMenu(menuCode, menuName, menuUrl,
-            parentCode, orderNo, remark);
-        return res;
+        return menuAO.addMenu(menuCode, menuName, menuUrl, parentCode, orderNo,
+            remark);
     }
 
     // ******** 修改菜单 *****
-    @RequestMapping(value = "/updatemenu", method = RequestMethod.POST)
+    @RequestMapping(value = "/menu/edit", method = RequestMethod.POST)
     @ResponseBody
     public boolean updatemenu(@RequestParam("menuCode") String menuCode,
             @RequestParam("menuName") String menuName,
@@ -49,9 +52,8 @@ public class MenuMgrController extends BaseController {
             @RequestParam("orderNo") String orderNo,
             @RequestParam("remark") String remark) {
         // 修改菜单验证
-        boolean editMenu = menuAO.editMenu(menuCode, menuName, menuUrl,
-            parentCode, orderNo, remark);
-        return editMenu;
+        return menuAO.editMenu(menuCode, menuName, menuUrl, parentCode, orderNo,
+            remark);
     }
 
     // ******** 删除菜单 *****
@@ -85,6 +87,24 @@ public class MenuMgrController extends BaseController {
             @RequestParam(value = "orderDir", required = false) String orderDir) {
         return menuAO.queryMenuPage(menuCode, parentCode, start, limit,
             orderColumn, orderDir);
+    }
+
+    @SuppressWarnings("rawtypes")
+    @RequestMapping(value = "/menu/detail", method = RequestMethod.GET)
+    @ResponseBody
+    public ModelAndView queryDetailMenu(
+            @RequestParam(value = "menuCode", required = false) String menuCode,
+            @RequestParam(value = "parentCode", required = false) String parentCode,
+            @RequestParam("operate") String operate) {
+        ModelAndView view = new ModelAndView("/system/menu_detail");
+        if (StringUtils.isNotBlank(menuCode) && "edit".equals(operate)) {// 是修改则查询数据库
+            List list = menuAO.queryMenuList(menuCode, parentCode);
+            if (list != null && list.size() > 0) {
+                view.addObject("menu", list.get(0));
+                view.addObject("operate", operate);
+            }
+        }
+        return view;
     }
 
 }

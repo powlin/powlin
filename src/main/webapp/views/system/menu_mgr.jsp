@@ -8,16 +8,6 @@
 <jsp:include page="../../components/jsp/include.jsp" />
 <script type="text/javascript">
 $(document).ready(function(){
-	/* $(".click").click(function(){
-		$(".tip").fadeIn(200);
-	}); */
-	
-	//查询
-	/* var data = {};
-	data['start'] = 0;
-	data['limit'] = 1;
-	var url = $("#base_path").val() + "/menumgr/querymenu";
-	doPostAjax(url, data, function(){}); */
 	
 	$(".deletemenu").click(function(){
 		/* var cmi = checkMenuItem(); */
@@ -33,29 +23,21 @@ $(document).ready(function(){
 			alert("请至少选择一条记录");
 		}
 	});
-  
-	$(".tiptop a").click(function(){
-		$(".tip").fadeOut(200);
-	});
-
-	$(".sure").click(function(){
-		$(".tip").fadeOut(100);
-	  
-	});
 	
 	//添加菜单
-	$('#addmenuBtn').click(function() {
-		var data = {};
+	$('#addBtn').click(function() {
+		window.location.href = $("#base_path").val() + "/menumgr/menu/detail?operate=add";
+		/* var data = {};
 		var t = $('#addmenuForm').serializeArray();
 		
 		$.each(t, function() {
 			data[this.name] = this.value;
 		});
-		var url = $("#base_path").val() + "/menumgr/addmenu";
-		doPostAjax(url, data, addmenuSuccessBack);
+		var url = $("#base_path").val() + "/menumgr/menu/addmenu";
+		doPostAjax(url, data, addmenuSuccessBack); */
 	});
 	
-	//添加菜单
+	//修改菜单
 	$('#updatemenuBtn').click(function() {
 		var data = {};
 		var t = $('#updatemenuForm').serializeArray();
@@ -65,10 +47,6 @@ $(document).ready(function(){
 		});
 		var url = $("#base_path").val() + "/menumgr/updatemenu";
 		doPostAjax(url, data, doSuccessBack);
-	});
-
-  	$(".cancel").click(function(){
-	  	$(".tip").fadeOut(100);
 	});
 
 });
@@ -155,14 +133,22 @@ $(function() {
 	});
 });
 
+//<button id="addBtn" class="btn btn-primary btn-sm" data-toggle="modal"
+//								data-target="#myModal">新增</button>
 function operateFormatter(value, row) {
-    return ['<a href="#" class="edit">查看</a> <a href="#" class="del">删除</a>'].join('');
+    return ['<button class="btn btn-primary btn-xs edit">修改</button>&nbsp;&nbsp;<button class="btn btn-danger btn-xs del">删除</button>'].join('');
     //<button class="btn btn-primary btn-xs edit">修改</button>&nbsp;&nbsp;<button class="btn btn-danger btn-xs del">删除</button>&nbsp;<button class="btn btn-danger btn-xs choice">分配菜单</button>'].join('');
 }
 
 window.operateEvents = {
     'click .edit': function (e, value, row, index) {
-    	$("#operate_id").val("edit");
+    	/* var data = {};
+    	data['menuCode'] = row.menuCode;
+    	data['parentCode'] = row.parentCode;
+    	data['operate'] = 'edit';
+		var url = $("#base_path").val() + "/menumgr/menu/detail";
+		doPostAjax(url, data, doEditSuccessBack); */
+    	window.location.href = $("#base_path").val() + "/menumgr/menu/detail?menuCode="+row.menuCode+"&parentCode="+row.parentCode+"&operate=edit";
     },
     'click .del': function (e, value, row, index) {
     	if(!confirm("是否确认删除菜单"+row.menuCode+"?")){
@@ -177,9 +163,17 @@ window.operateEvents = {
     }
 };
 
+function doEditSuccessBack(res){
+	/* alert(res.success); */
+	/* $("#myModalEdit").show(); */
+}
 function addmenuSuccessBack(res){
-	var menuCode = res.menuCode;
-	alert(menuCode);
+	if(res.success == true){
+		alert("新增成功");
+		location.reload(true);
+	}else{
+		alert("新增失败");
+	}
 }
 
 function doSuccessBack(res) {
@@ -214,6 +208,7 @@ function doSuccessDel(res) {
 </head>
 <body>
 	<input type="hidden" id="base_path" value="<%=request.getContextPath()%>"/>
+	<input type="hidden" id="operate" value="${operate}"/>
 	<div class="place">
 	    <span>位置：</span>
 	    <ul class="placeul">
@@ -235,22 +230,21 @@ function doSuccessDel(res) {
 								class="form-control" id="parent_code_search" placeholder="请选择父菜单编号">
 						</div>&nbsp;
 						<button id="searchBtn" class="btn btn-default btn-sm">搜索</button>
-						<button id="addBtn" class="btn btn-primary btn-sm" data-toggle="modal"
-								data-target="#myModal">新增</button>
+						<button id="addBtn" class="btn btn-primary btn-sm">新增</button>
 					</div>
 				</div>
 				<table id="tableList"></table>
 			</div>
 		</div>
     	<!-- 模态框（Modal） -->
-		<div class="modal fade" id="myModal" tabindex="-1" role="dialog"
+		<!-- <div class="modal fade" id="myModal" tabindex="-1" role="dialog"
 			aria-labelledby="myModalLabel" aria-hidden="true">
 			<div class="modal-dialog">
 				<div class="modal-content">
 					<div class="modal-header">
 						<button type="button" class="close" data-dismiss="modal"
 							aria-hidden="true">&times;</button>
-						<h4 class="modal-title" id="myModalLabel">菜单设置</h4>
+						<h4 class="modal-title" id="myModalLabel">菜单新增</h4>
 					</div>
 					<div class="modal-body">
 						<form class="form-horizontal" role="form" id="addmenuForm">
@@ -303,8 +297,74 @@ function doSuccessDel(res) {
 						<button class="btn btn-default" data-dismiss="modal">关闭</button>
 					</div>
 				</div>
-				<!-- /.modal-content -->
+				/.modal-content
 			</div>
+			/.modal
+		</div>
+		
+		模态框（Modal）
+		<div class="modal fade" id="myModalEdit" tabindex="-1" role="dialog"
+			aria-labelledby="myModalLabel" aria-hidden="true">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal"
+							aria-hidden="true">&times;</button>
+						<h4 class="modal-title" id="myModalLabel">菜单修改</h4>
+					</div>
+					<div class="modal-body">
+						<form class="form-horizontal" role="form" id="updatemenuForm">
+							<div class="form-group">
+								<label for="name" class="col-sm-2 control-label">菜单编号</label>
+								<div class="col-sm-10">
+									<input type="text" class="form-control" name="menuCode"
+										placeholder="请输入菜单编号">
+								</div>
+							</div>
+							<div class="form-group">
+								<label for="name" class="col-sm-2 control-label">菜单名称</label>
+								<div class="col-sm-10">
+									<input type="text" class="form-control" name="menuName"
+										placeholder="请输入菜单名称">
+								</div>
+							</div>
+							<div class="form-group">
+								<label for="name" class="col-sm-2 control-label">菜单地址</label>
+								<div class="col-sm-10">
+									<input type="text" class="form-control" name="menuUrl"
+										placeholder="请输入菜单地址">
+								</div>
+							</div>
+							<div class="form-group">
+								<label for="name" class="col-sm-2 control-label">父菜单编号</label>
+								<div class="col-sm-10">
+									<input type="text" class="form-control" name="parentCode"
+										placeholder="请输入父菜单编号">
+								</div>
+							</div>
+							<div class="form-group">
+								<label for="name" class="col-sm-2 control-label">菜单顺序号</label>
+								<div class="col-sm-10">
+									<input type="text" class="form-control" name="orderNo"
+										placeholder="请输入菜单顺序号">
+								</div>
+							</div>
+							<div class="form-group">
+								<label for="name" class="col-sm-2 control-label">备注</label>
+								<div class="col-sm-10">
+									<input type="text" class="form-control" name="remark"
+										placeholder="请输入备注">
+								</div>
+							</div>
+						</form>
+					</div>
+					<div class="modal-footer">
+						<button id="editmenuBtn" class="btn btn-primary">保存</button>
+						<button class="btn btn-default" data-dismiss="modal">关闭</button>
+					</div>
+				</div>
+				/.modal-content
+			</div> -->
 			<!-- /.modal -->
 		</div>
     </div>
