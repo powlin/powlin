@@ -8,6 +8,11 @@
  */
 package com.xnjr.cpzc.ao;
 
+import java.util.List;
+
+import com.xnjr.cpzc.dto.res.Page;
+import com.xnjr.cpzc.dto.res.ZC703633Res;
+
 /** 
  * 系统用户
  * @author: xieyj 
@@ -26,5 +31,60 @@ public interface ISysUserAO {
      * @history:
      */
     public boolean login(String loginName, String loginPwd, String loginIp);
+
+    /**
+     * 查询用户
+     * @param userCode
+     * @param userName
+     * @param status
+     * @param orderDir 
+     * @param orderColumn 
+     * @param limit 
+     * @param start 
+     * @return 
+     * @create: 2015年8月30日 下午8:56:36 yuexia
+     * @history:
+     */
+    @SuppressWarnings("rawtypes")
+    public Page queryMenuPage(String userCode, String userName, String status,
+            String start, String limit, String orderColumn, String orderDir);
+
+    /**
+     * 查询用户列表
+     * @param userCode
+     * @param userName
+     * @param status
+     * @return 
+     * @create: 2015年8月30日 下午9:48:57 yuexia
+     * @history:
+     */
+    @SuppressWarnings("rawtypes")
+    public List queryUserList(String userCode, String userName, String status);
+
+    /**
+     * 新增用户
+     * @param userCode
+     * @param userName
+     * @param password
+     * @param creator
+     * @return 
+     * @create: 2015年8月30日 下午10:28:18 yuexia
+     * @history:
+     */
+    public ZC703633Res addUser(String userCode, String userName,
+            String password, String creator);
+
+    /**
+     * 更改密码
+     * @param userCode
+     * @param oldPwd
+     * @param newPwd
+     * @param updater
+     * @return 
+     * @create: 2015年8月30日 下午10:42:08 yuexia
+     * @history:
+     */
+    public boolean editUserPas(String userCode, String oldPwd, String newPwd,
+            String updater);
 
 }

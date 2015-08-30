@@ -1,13 +1,20 @@
 package com.xnjr.cpzc.controller;
 
+import java.util.List;
+
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
 
 import com.xnjr.cpzc.ao.ISysUserAO;
 import com.xnjr.cpzc.base.session.SessionUser;
+import com.xnjr.cpzc.dto.res.Page;
+import com.xnjr.cpzc.dto.res.ZC703633Res;
 
 /**
  * 系统用户模块
@@ -36,4 +43,102 @@ public class SysUserController extends BaseController {
             return "/login";
         }
     }
+
+    @SuppressWarnings("rawtypes")
+    @RequestMapping(value = "/user/page", method = RequestMethod.GET)
+    @ResponseBody
+    public Page queryUserPage(
+            @RequestParam(value = "userCode", required = false) String userCode,
+            @RequestParam(value = "userName", required = false) String userName,
+            @RequestParam(value = "status", required = false) String status,
+            @RequestParam("start") String start,
+            @RequestParam("limit") String limit,
+            @RequestParam(value = "orderColumn", required = false) String orderColumn,
+            @RequestParam(value = "orderDir", required = false) String orderDir) {
+        return sysUserAO.queryMenuPage(userCode, userName, status, start, limit,
+            orderColumn, orderDir);
+    }
+
+    @SuppressWarnings("rawtypes")
+    @RequestMapping(value = "/user/detail", method = RequestMethod.GET)
+    @ResponseBody
+    public ModelAndView queryDetailUser(
+            @RequestParam(value = "userCode", required = false) String userCode,
+            @RequestParam(value = "creator", required = false) String creator,
+            @RequestParam("operate") String operate) {
+        ModelAndView view = new ModelAndView("/system/user_detail");
+        if (StringUtils.isNotBlank(userCode) && "edit".equals(operate)) {// 是修改则查询数据库
+            List list = sysUserAO.queryUserList(userCode, "", "");
+            if (list != null && list.size() > 0) {
+                view.addObject("user", list.get(0));
+                view.addObject("operate", operate);
+            }
+        }
+        return view;
+    }
+
+    // ******** 添加菜单 *****
+    @RequestMapping(value = "/user/add", method = RequestMethod.POST)
+    @ResponseBody
+    public ZC703633Res addmenu(@RequestParam("userCode") String userCode,
+            @RequestParam("userName") String userName,
+            @RequestParam("password") String password,
+            @RequestParam("creator") String creator) {
+        // 添加用户验证
+        return sysUserAO.addUser(userCode, userName, password, creator);
+    }
+
+    @SuppressWarnings("rawtypes")
+    @RequestMapping(value = "/user/detailPas", method = RequestMethod.GET)
+    @ResponseBody
+    public ModelAndView queryDetailPasUser(
+            @RequestParam(value = "userCode", required = false) String userCode,
+            @RequestParam("operate") String operate) {
+        ModelAndView view = new ModelAndView("/system/user_detail_pas");
+        if (StringUtils.isNotBlank(userCode) && "edit".equals(operate)) {// 是修改则查询数据库
+            List list = sysUserAO.queryUserList(userCode, "", "");
+            if (list != null && list.size() > 0) {
+                view.addObject("user", list.get(0));
+                view.addObject("operate", operate);
+            }
+        }
+        return view;
+    }
+
+    @SuppressWarnings("rawtypes")
+    @RequestMapping(value = "/user/detailSta", method = RequestMethod.GET)
+    @ResponseBody
+    public ModelAndView queryDetailStaUser(
+            @RequestParam(value = "userCode", required = false) String userCode,
+            @RequestParam("operate") String operate) {
+        ModelAndView view = new ModelAndView("/system/user_detail_sta");
+        if (StringUtils.isNotBlank(userCode) && "edit".equals(operate)) {// 是修改则查询数据库
+            List list = sysUserAO.queryUserList(userCode, "", "");
+            if (list != null && list.size() > 0) {
+                view.addObject("user", list.get(0));
+                view.addObject("operate", operate);
+            }
+        }
+        return view;
+    }
+
+    // ******** 修改用户密码 *****
+    @RequestMapping(value = "/user/editPas", method = RequestMethod.POST)
+    @ResponseBody
+    public boolean updatemenu(@RequestParam("userCode") String userCode,
+            @RequestParam("oldPwd") String oldPwd,
+            @RequestParam("newPwd") String newPwd,
+            @RequestParam("updater") String updater) {
+        // 修改菜单验证
+        return sysUserAO.editUserPas(userCode, oldPwd, newPwd, updater);
+    }
+
+    // ******** 删除用户 *****
+    @RequestMapping(value = "/usr/drop", method = RequestMethod.POST)
+    @ResponseBody
+    public boolean deletemenu(@RequestParam("userCode") String userCode) {
+        // 删除用户验证
+        return true;// 无接口
+    }
+
 }

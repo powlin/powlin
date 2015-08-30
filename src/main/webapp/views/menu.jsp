@@ -50,7 +50,7 @@ $(function(){
 		        <li><cite></cite><a href="#" target="rightFrame">部门设置</a><i></i></li>
 		        <li><cite></cite><a href="#" target="rightFrame">岗位设置</a><i></i></li>
 		        <li><cite></cite><a href="<%=request.getContextPath()%>/views/system/role.htm" target="rightFrame">角色设置</a><i></i></li>
-		        <li><cite></cite><a href="#" target="rightFrame">用户设置</a><i></i></li>
+		        <li><cite></cite><a href="<%=request.getContextPath()%>/views/system/user_mgr.htm" target="rightFrame">用户设置</a><i></i></li>
 		    </ul>     
 	    </dd>
     </dl>
