@@ -11,7 +11,6 @@ package com.xnjr.cpzc.ao;
 import java.util.List;
 
 import com.xnjr.cpzc.dto.res.Page;
-import com.xnjr.cpzc.dto.res.ZC703633Res;
 
 /** 
  * 系统用户
@@ -71,7 +70,7 @@ public interface ISysUserAO {
      * @create: 2015年8月30日 下午10:28:18 yuexia
      * @history:
      */
-    public ZC703633Res addUser(String userCode, String userName,
+    public boolean addUser(String userCode, String userName,
             String password, String creator);
 
     /**
@@ -86,5 +85,16 @@ public interface ISysUserAO {
      */
     public boolean editUserPas(String userCode, String oldPwd, String newPwd,
             String updater);
+    /**
+     * 更改用户状态
+     * @param userCode
+     * @param oldPwd
+     * @param newPwd
+     * @param updater
+     * @return 
+     * @create: 2015年8月30日 下午10:42:08 yuexia
+     * @history:
+     */
+	public boolean editUserSta(String userCode, String status, String updater);
 
 }

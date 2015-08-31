@@ -17,6 +17,13 @@
 			$("#operContent").text("修改用户状态");
 		}
 		
+		var statusSel = "#statusSel>option";
+		for(var i = 0;i < $(statusSel).length;i++){
+			if($(statusSel).eq(i).val() == $("#status").val()){
+				$(statusSel).eq(i).attr("selected", "selected");
+			}
+		}
+		
 		//提交
 		$('#subBtn').click(function() {
 			var data = {};
@@ -24,8 +31,7 @@
 			$.each(t, function() {
 				data[this.name] = this.value;
 			});
-			var operator = $("#operate").val() != "edit"?"add":"edit";
-			var url = $("#base_path").val() + "/sysUser/user/" + operator;
+			var url = $("#base_path").val() + "/sysUser/user/editSta";
 			doPostAjax(url, data, doSuccessBack);
 		});
 	});
@@ -43,6 +49,7 @@
 <body>
 	<input type="hidden" id="base_path" value="<%=request.getContextPath()%>" />
 	<input type="hidden" id="operate" value = "${operate}"/>
+	<input type="hidden" id="status" value = "${user.status}"/>
 	<div class="place">
     	<span>位置：</span>
 	    <ul class="placeul">
@@ -56,10 +63,10 @@
 	    <div class="formtitle"><span>用户信息</span></div>
 		    <ul class="forminfo">
 			    <li><label>用户编号:</label><input type="text" id="userCode" name="userCode" value ="${user.userCode}"  class="dfinput"/></li>
-			    <li><label>状态:</label><select type="text" name="status" value ="${user.status}"  class="dfinput">
-			    	<option value=""></option>
+			    <li><label>状态:</label><select name="status" id="statusSel" class="dfinput">
+					<option value="1">正常</option>
+					<option value="2">锁定</option>
 			    </select></li>
-			    <li><label>更新人编号:</label><input type="text" name="updater" value ="${user.updater}"  class="dfinput"/></li>
 			    <li><input id="subBtn" type="button" class="btn mr40" value="确认保存"/></li>
 			</ul>
 	    </div>

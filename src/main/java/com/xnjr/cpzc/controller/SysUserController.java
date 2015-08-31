@@ -14,7 +14,6 @@ import org.springframework.web.servlet.ModelAndView;
 import com.xnjr.cpzc.ao.ISysUserAO;
 import com.xnjr.cpzc.base.session.SessionUser;
 import com.xnjr.cpzc.dto.res.Page;
-import com.xnjr.cpzc.dto.res.ZC703633Res;
 
 /**
  * 系统用户模块
@@ -80,12 +79,12 @@ public class SysUserController extends BaseController {
     // ******** 添加菜单 *****
     @RequestMapping(value = "/user/add", method = RequestMethod.POST)
     @ResponseBody
-    public ZC703633Res addmenu(@RequestParam("userCode") String userCode,
+    public boolean addmenu(@RequestParam("userCode") String userCode,
             @RequestParam("userName") String userName,
-            @RequestParam("password") String password,
-            @RequestParam("creator") String creator) {
+            @RequestParam("password") String password) {
         // 添加用户验证
-        return sysUserAO.addUser(userCode, userName, password, creator);
+    	SessionUser sessionUser = (SessionUser) sessionProvider.getUserDetail();
+        return sysUserAO.addUser(userCode, userName, password, sessionUser.getUser_id());
     }
 
     @SuppressWarnings("rawtypes")
@@ -125,20 +124,22 @@ public class SysUserController extends BaseController {
     // ******** 修改用户密码 *****
     @RequestMapping(value = "/user/editPas", method = RequestMethod.POST)
     @ResponseBody
-    public boolean updatemenu(@RequestParam("userCode") String userCode,
+    public boolean editUserPas(@RequestParam("userCode") String userCode,
             @RequestParam("oldPwd") String oldPwd,
-            @RequestParam("newPwd") String newPwd,
-            @RequestParam("updater") String updater) {
-        // 修改菜单验证
-        return sysUserAO.editUserPas(userCode, oldPwd, newPwd, updater);
+            @RequestParam("newPwd") String newPwd) {
+        // 修改用户密码
+    	SessionUser sessionUser = (SessionUser) sessionProvider.getUserDetail();
+        return sysUserAO.editUserPas(userCode, oldPwd, newPwd, sessionUser.getUser_id());
     }
 
-    // ******** 删除用户 *****
-    @RequestMapping(value = "/usr/drop", method = RequestMethod.POST)
+    // ******** 修改用户状态 *****
+    @RequestMapping(value = "/user/editSta", method = RequestMethod.POST)
     @ResponseBody
-    public boolean deletemenu(@RequestParam("userCode") String userCode) {
-        // 删除用户验证
-        return true;// 无接口
+    public boolean editUserSta(@RequestParam("userCode") String userCode,
+            @RequestParam("status") String status) {
+        // 修改用户状态
+    	SessionUser sessionUser = (SessionUser) sessionProvider.getUserDetail();
+        return sysUserAO.editUserSta(userCode, status, sessionUser.getUser_id());
     }
 
 }
